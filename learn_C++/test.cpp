@@ -5,20 +5,47 @@
 using namespace std;
 
 int main() {
-    int* pArry = new int[3];
-    pArry[0] = 1;
-    pArry[1] = 2;
-    pArry[2] = 3;
+    
 
-    int* p = new int;
-    *p = 4;
+    // char s[1000000];
+    // int cnt[27] = {0, }, big = 0, bigI = -1;
+    // cin >> s;
+    // for(int i = 0; i < strlen(s); i++) {
+    //     if(s[i] >= 'a' && s[i] <= 'z') {
+    //         cnt[s[i] - 'a']++;
+    //     } else {
+    //         cnt[s[i] - 'A']++;
+    //     }
+    // }
+    // for(int i = 0; i < 26; i++) {
+    //     // cout << (char)(i + 'A') << ": " << cnt[i] << "   ";
+    //     if(cnt[i] > big) {
+    //         big = cnt[i];
+    //         bigI = i;
+    //     }
+    // }
+    // for(int i = 0; i < 26; i++) {
+    //     if(cnt[i] == big && i != bigI){
+    //         cout << '?';
+    //         return 0; 
+    //     }
+    // }
+    // cout << (char)(bigI + 'A');
 
-    cout << pArry[0] 
-    << endl;
-    cout << p << endl;
+    // int* pArry = new int[3];
+    // pArry[0] = 1;
+    // pArry[1] = 2;
+    // pArry[2] = 3;
 
-    delete p;
-    delete[] pArry;
+    // int* p = new int;
+    // *p = 4;
+
+    // cout << pArry[0] 
+    // << endl;
+    // cout << p << endl;
+
+    // delete p;
+    // delete[] pArry;
 
 
     // int in;
