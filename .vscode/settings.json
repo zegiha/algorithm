@@ -3,6 +3,13 @@
         "iostream": "cpp",
         "ostream": "cpp",
         "cstring": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "vector": "cpp",
+        "cmath": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "array": "cpp",
+        "unordered_map": "cpp",
+        "initializer_list": "cpp"
     }
 }
