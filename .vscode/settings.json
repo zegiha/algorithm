@@ -12,6 +12,8 @@
         "unordered_map": "cpp",
         "initializer_list": "cpp",
         "iosfwd": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "valarray": "cpp",
+        "numeric": "cpp"
     }
 }
