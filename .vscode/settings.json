@@ -14,6 +14,7 @@
         "iosfwd": "cpp",
         "algorithm": "cpp",
         "valarray": "cpp",
-        "numeric": "cpp"
+        "numeric": "cpp",
+        "queue": "cpp"
     }
 }
