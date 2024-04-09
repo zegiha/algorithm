@@ -15,6 +15,13 @@
         "algorithm": "cpp",
         "valarray": "cpp",
         "numeric": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "memory": "cpp",
+        "mutex": "cpp",
+        "ranges": "cpp",
+        "thread": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp",
+        "xmemory": "cpp"
     }
 }
