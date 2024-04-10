@@ -22,6 +22,7 @@
         "thread": "cpp",
         "tuple": "cpp",
         "utility": "cpp",
-        "xmemory": "cpp"
+        "xmemory": "cpp",
+        "stack": "cpp"
     }
 }
