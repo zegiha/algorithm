@@ -23,6 +23,8 @@
         "tuple": "cpp",
         "utility": "cpp",
         "xmemory": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "list": "cpp",
+        "xutility": "cpp"
     }
 }
