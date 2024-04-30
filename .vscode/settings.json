@@ -25,6 +25,7 @@
         "xmemory": "cpp",
         "stack": "cpp",
         "list": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "*.tcc": "cpp"
     }
 }
