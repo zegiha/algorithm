@@ -26,6 +26,9 @@
         "stack": "cpp",
         "list": "cpp",
         "xutility": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "functional": "cpp",
+        "random": "cpp",
+        "regex": "cpp"
     }
 }

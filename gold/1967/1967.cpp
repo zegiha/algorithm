@@ -3,45 +3,54 @@
 #include <stack>
 using namespace std;
 
-int n, ans;
-int arr[10002][10002];
+int n;
+vector <vector <pair <int, int>>> arr;
 
-void dfs(int root) {
+pair <int, int> dfs(int root) {
+  int ansIndex = root, ansSum = 0;
   stack <pair <int, int>> s;
-  bool visit[10002] = {0, };
+  vector <bool> visit;
+  visit.resize(n + 1);
+
   s.push(make_pair(root, 0));
   visit[root] = true;
   while(!s.empty()) {
     bool sw = true;
-    int i = s.top().first, sum = s.top().second;
+    int e = s.top().first, sum = s.top().second;
     s.pop();
-    // cout << i << "  ||  i\n" << sum << "  ||  sum\n";
-    for(int j = 1; j <= n; j++) {
-      if(arr[i][j] != 0 && !visit[j]) {
-        visit[j] = true;
-        s.push(make_pair(j, sum + arr[i][j]));
+    for(int i = 0; i < arr[e].size(); i++) {
+      if(!visit[arr[e][i].first]) {
+        s.push(make_pair(arr[e][i].first, sum + arr[e][i].second));
+        visit[arr[e][i].first] = true;
         sw = false;
       }
     }
-    if(sw) {
-      // cout << "end\n\n";
-      if(ans < sum) ans = sum;
+    if(sw) if(ansSum < sum) {
+      ansIndex = e;
+      ansSum = sum;
     }
+
+    // for(int i = 1; i <= n; i++) {
+    //   if(arr[e][i] != 0 && !visit[i]) {
+    //     s.push(make_pair(i, sum + arr[e][i]));
+    //     visit[i] = true;
+    //     sw = false;
+    //   }
+    // }
   }
+  return make_pair(ansIndex, ansSum);
 }
 
 int main() {
   cin >> n;
-  // arr.resize(n + 2, vector <int> (n + 2, 0));
+  arr.resize(n + 1);
   for(int i = 0; i < n - 1; i++) {
     int a, b, c;
     cin >> a >> b >> c;
-    arr[a][b] = c;
-    arr[b][a] = c;
+    arr[a].push_back(make_pair(b, c));
+    arr[b].push_back(make_pair(a, c));
   }
 
-  for(int i = 1; i <= n; i++) {
-    dfs(i);
-  }
-  cout << ans;
+  pair <int, int> end = dfs(1);
+  cout << dfs(end.first).second;
 }
