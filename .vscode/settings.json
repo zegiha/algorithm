@@ -29,6 +29,7 @@
         "*.tcc": "cpp",
         "functional": "cpp",
         "random": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "span": "cpp"
     }
 }
