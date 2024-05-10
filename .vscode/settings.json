@@ -30,6 +30,7 @@
         "functional": "cpp",
         "random": "cpp",
         "regex": "cpp",
-        "span": "cpp"
+        "span": "cpp",
+        "xstring": "cpp"
     }
 }
