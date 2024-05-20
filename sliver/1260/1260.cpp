@@ -1,73 +1,50 @@
 #include <iostream>
-#include <queue>
-#include <stack>
 #include <vector>
+#include <queue>
 using namespace std;
 
-int n, m, root;
-vector <vector <int>> arr;
+int n, m, s;
+vector <vector <bool>> arr;
+vector <bool> d, b;
 
-void dfs() {
-    vector <bool> check; check.resize(n + 2);
-    stack <int> s;
-    check[root] = true;
-    s.push(root);
-    cout << root << ' ';
-
-    while(!s.empty()) {
-        int peek = s.top(); s.pop();
-
-        for(int i = 1; i <= n; i++) {
-            if(arr[peek][i] == 1 && !check[i]){
-                check[i] = true;
-                s.push(i);
-                cout << i << ' ';
-                break;
-            }
-        }
+void dfs(int e) {
+  cout << e << ' ';
+  d[e] = true;
+  for(int i = 1; i <= n; i++) {
+    if(!d[i] && arr[e][i]) {
+      dfs(i);
     }
+  }
 }
 
 void bfs() {
-    vector <bool> check; check.resize(n + 2);
-    queue <int> q;
-    check[root] = true;
-    q.push(root);
-    cout << root << ' ';
-
-    while(!q.empty()) {
-        int peek = q.front(); q.pop();
-
-        for(int i = 1; i <= n; i++) {
-            if(arr[peek][i] == 1 && !check[i]) {
-                check[i] = true;
-                q.push(i);
-                cout << i << ' ';
-            }
-        }
+  queue <int> q;
+  q.push(s);
+  b[s] = true;
+  while(!q.empty()) {
+    int e = q.front(); q.pop();
+    cout << e << ' ';
+    for(int i = 1; i <= n; i++) {
+      if(arr[e][i] && !b[i]) {
+        q.push(i);
+        b[i] = true;
+      }
     }
+  }
 }
 
 int main() {
-    int x, y;
-    vector <bool> tmpCheck;
-    cin >> n >> m >> root;
-    arr.resize(n + 2);
-    tmpCheck.resize(n + 2);
-    for(int i = 0; i < m; i++) {
-        cin >> x >> y;
-        if(!tmpCheck[x]) {
-            arr[x].resize(n + 2);
-            tmpCheck[x] = true;
-        }
-        if(!tmpCheck[y]) {
-            arr[y].resize(n + 2);
-            tmpCheck[y] = true;
-        }
-        arr[x][y] = 1;
-        arr[y][x] = 1;
-    }
+  cin >> n >> m >> s;
+  arr.resize(n + 2, vector <bool> (n + 2, false));
+  d.resize(n + 2, false);
+  b.resize(n + 2, false);
+  for(int i = 0; i < m; i++) {
+    int a, b;
+    cin >> a >> b;
+    arr[a][b] = true;
+    arr[b][a] = true;
+  }
 
-    dfs(); cout << endl;
-    bfs();
+  dfs(s); cout << endl;
+  bfs();
 }

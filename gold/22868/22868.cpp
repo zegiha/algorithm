@@ -60,6 +60,7 @@ int main() {
     arr[b].push_back(a);
   }
   cin >> s >> e;
+  // 정렬 부분
   for(int i = 1; i <= n; i++) {
     sort(arr[i].begin(), arr[i].end());
   }
