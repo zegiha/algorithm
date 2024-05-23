@@ -2,9 +2,8 @@
 #include <vector>
 using namespace std;
 
-int n;
-vector <vector <int>> arr, stu;
-vector <pair <int, int>> cdn;
+int n, nn;
+vector <vector <int>> stu, arr;
 
 /*
 1. 비어있는 칸 중에서 좋아하는 학생이 인접한 칸에 가장 많은 칸으로 자리를 정한다.
@@ -18,25 +17,67 @@ vector <pair <int, int>> cdn;
   아니요 ( 없음 )
 */
 
-void first(int key) {
-  for(int t = 0; t < stu[key].size(); t++) {
-    if(arr[cdn[stu[key][t]].first][cdn[stu[key][t]].second] != 0) {
-      
+void getSum(pair <int, int>* sum, int row, int col, int e) {
+  if(row + 1 <= n) {
+    if(arr[row + 1][col] == 0) sum->second++;
+    else {
+      for(int i = 0; i < 4; i++) {
+        if(stu[e][i] == arr[row + 1][col]) sum->first++;
+      }
+    }
+  }
+  if(row - 1 > 0) {
+    if(arr[row - 1][col] == 0) sum->second++;
+    else {
+      for(int i = 0; i < 4; i++) {
+        if(stu[e][i] == arr[row - 1][col]) sum->first++;
+      }
+    }
+  }
+  if(col + 1 <= n) {
+    if(arr[row][col + 1] == 0) sum->second++;
+    else {
+      for(int i = 0; i < 4; i++) {
+        if(stu[e][i] == arr[row][col + 1]) sum->first++;
+      }
+    }
+  }
+  if(col - 1 > 0) {
+    if(arr[row][col - 1] == 0) sum->second++;
+    else {
+      for(int i = 0; i < 4; i++) {
+        if(stu[e][i] == arr[row][col - 1]) sum->first++;
+      }
+    }
+  }
+}
+
+void solve(int e) {
+  pair <pair <int, int>, pair <int, int>> loc = make_pair(make_pair(0, 0), make_pair(0, 0));
+  for(int i = 1; i <= n; i++) {
+    for(int j = 1; j <= n; j++) {
+      if(arr[i][j] = 0) {
+        pair <int, int> sum = make_pair(0, 0);
+        getSum(&sum, i, j, e);
+        if(loc.first.first == i && loc.first.second == j) {
+          
+        }
+      }
     }
   }
 }
 
 int main() {
-  cin >> n;
-  arr.resize(n + 2, vector <int> (n + 2, 0));
-  stu.resize((n * n) + 2);
-  cdn.resize((n * n) + 2, pair <int, int> (0, 0));
-  for(int t = 0; t < n * n; t++) {
-    int key; cin >> key;
-    for(int i = 0; i < 4; i++) {
-      int tmp; cin >> tmp;
-      stu[key].push_back(tmp);
+  cin >> n; nn = n * n;
+  arr.resize(n + 1, vector <int> (n + 1, 0));
+  stu.resize(nn + 1);
+  for(int t = 0; t < nn; t++) {
+    int i, v; cin >> i;
+    for(int t1 = 0; t1 < 4; t1++) {
+      cin >> v;
+      stu[i].push_back(v);
     }
-    first(key);
+    solve(i);
   }
+
 }

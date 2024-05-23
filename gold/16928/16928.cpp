@@ -18,31 +18,40 @@ int main() {
   }
 
   queue <int> q;
-  bool visit[101] = {0, };
+  bool visit[120][3] = {0, };
   q.push(1);
-  visit[1] = true;
+  visit[1][0] = true;
   while(!q.empty()) {
     int size = q.size();
     for(int t = 0; t < size; t++) {
       int e = q.front(); q.pop();
+      // cout << e << endl;
       if(e == 100) {
         cout << ans;
         return 0;
       }
       for(int dice = 1; dice <= 6; dice++) {
         int next = e + dice;
-        if(snake[next] != 0 && !visit[snake[next]]) {
-          visit[snake[next]] = true;
-          q.push(snake[next]);
-        } else if(ladder[next] != 0 && !visit[ladder[next]]) {
-          visit[ladder[next]] = true;
-          q.push(ladder[next]);
-        } else if(!visit[next]) {
-          visit[next] = true;
-          q.push(next);
+        // cout << "next: " << next << endl;
+        if(snake[next]) {
+          if(!visit[snake[next]][3]) {
+            visit[snake[next]][3] = true;
+            q.push(snake[next]);
+          }
+        } else if(ladder[next]) {
+          if(!visit[ladder[next]][2]) {
+            visit[ladder[next]][2] = true;
+            q.push(ladder[next]);
+          }
+        } else {
+          if(!visit[next][0]) {
+            visit[next][0] = true;
+            q.push(next);
+          }
         }
       }
     }
     ans++;
+    // cout << "*****************\n";
   }
 }
