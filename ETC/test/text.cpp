@@ -11,8 +11,8 @@ int main() {
     }
     for(int i = 1; i <= 7; i++) {
         for(int j = 1; j <= 7; j++) {
-            if(arr[i][j] == arr[i][0] * 2) cout << "● ";
-            else cout << "○ ";
+            if(arr[i][j] == arr[i][0] * 2) cout << "1 ";
+            else cout << "0 ";
         }
         cout << endl;
     }
