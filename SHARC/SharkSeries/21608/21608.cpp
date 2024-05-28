@@ -3,7 +3,7 @@
 #include <queue>
 using namespace std;
 
-int n, limit;
+int n, limit, ans;
 vector <vector <int>> arr, map;
 
 struct compare{
@@ -75,5 +75,23 @@ int main() {
     seat(index);
   }
 
-  
+  for(int i = 1; i <= n; i++) {
+    for(int j = 1; j <= n; j++) {
+      int adj = getAdj(map[i][j], i, j).first;
+      switch(adj) {
+        case(1):
+          ans += 1;
+          break;
+        case(2):
+          ans += 10;
+          break;
+        case(3):
+          ans += 100;
+          break;
+        case(4):
+          ans += 1000;
+      }
+    }
+  }
+  cout << ans;
 }
