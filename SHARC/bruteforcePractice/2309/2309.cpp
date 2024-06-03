@@ -5,10 +5,12 @@
 using namespace std;
 
 int arr[9];
+bool sw;
 
 void solve(int index, int sum, int cnt, vector <int> ans) {
   if(cnt == 7) {
-    if(sum == 100) {
+    if(sum == 100 && !sw) {
+      sw = true;
       sort(ans.begin(), ans.end());
       for(int i = 0; i < ans.size(); i++) cout << ans[i] << '\n';
     }
