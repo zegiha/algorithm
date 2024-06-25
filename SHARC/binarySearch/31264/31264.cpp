@@ -4,46 +4,52 @@
 
 using namespace std;
 
-int targetN, shootingChance, goal, ans = 1;
-vector <int> target;
+long long targetN, shootingChance, goal;
+vector<long long> target;
 
-int mostBig(int e) {
-  int left = 0, right = targetN - 1;
-  int big = -1;
-  while (left <= right) {
-    int mid = left + (right - left) / 2;
-    if (target[mid] > e) {
-      right = mid - 1;
-    } else {
-      left = mid + 1;
+long long mostBig(long long e) {
+    long long left = 0, right = targetN - 1;
+
+    while (left <= right) {
+        long long mid = left + (right - left) / 2;
+        if (target[mid] > e) {
+            right = mid - 1;
+        } else {
+            left = mid + 1;
+        }
     }
-  }
-  
-  if(right < 0) return 0;
-  return target[right];
+
+    if (right < 0) return 0;
+    return target[right];
 }
 
-bool isAchiveGoal(int e) {
-  for(int t = 0; t < shootingChance; t++) {
-    // cout << mostBig(e) << '\n';
-    e += mostBig(e);
-  }
-  
-  if(e - ans >= goal) return true;
-  else return false;
+bool isAchieveGoal(long long e) {
+    long long sum = 0;
+    for (long long t = 0; t < shootingChance; t++) {
+        sum += mostBig(e + sum);
+        if (sum >= goal) return true;
+    }
+    return sum >= goal;
 }
 
 int main() {
-  cin >> targetN >> shootingChance >> goal;
-  target.resize(targetN);
-  for(int i = 0; i < targetN; i++) cin >> target[i];
-  sort(target.begin(), target.end());
+    cin >> targetN >> shootingChance >> goal;
+    target.resize(targetN);
+    for (long long i = 0; i < targetN; i++) cin >> target[i];
+    sort(target.begin(), target.end());
 
-  while(true) {
-    if(isAchiveGoal(ans)){
-      cout << ans;
-      return 0;
+    long long left = 1, right = 100000, ans = right;
+    
+    while (left <= right) {
+        long long mid = left + (right - left) / 2;
+        if (isAchieveGoal(mid)) {
+            ans = mid;
+            right = mid - 1;
+        } else {
+            left = mid + 1;
+        }
     }
-    ans++;
-  }
+
+    cout << ans << endl;
+    return 0;
 }
