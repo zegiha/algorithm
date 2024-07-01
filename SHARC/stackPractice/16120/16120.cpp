@@ -5,31 +5,67 @@
 using namespace std;
 
 string str, ch = {'P', 'P', 'A', 'P'};
+int sBack = 0;
+char s[1000001] = {'\0', };
 
-bool isPPAP(vector <char> s) {
-  if(s.size() >= 4) {
+bool isPPAP() {
+  if(sBack >= 4) {
     for(int i = 0; i < 4; i++) {
-      if(s[s.size() - 4 + i] != ch[i]) return false;
+      if(s[sBack - 4 + i] != ch[i]) return false;
     }
-  }
-  return true;
+    return true;
+  } else return false;
 }
 
 int main() {
   cin >> str;
 
-  vector <char> s;
   for(int i = 0; i < str.size(); i++) {
-    s.push_back(str[i]);
-    if(isPPAP(s)) {
-      for(int t = 0; t < 3; t++) s.pop_back();
+    s[sBack++] = str[i];
+    if(isPPAP()) {
+      for(int t = 0; t < 3; t++) s[--sBack] = '\0';
     }
-    cout << "check" << s[s.size() - 1] << endl;
   }
 
-  if((s.size() == 1 && s[0] == 'P') || isPPAP(s)) cout << "PPAP";
+  if((sBack == 1 && s[0] == 'P') || isPPAP()) cout << "PPAP";
   else cout << "NP";
 }
+
+
+// #include <iostream>
+// #include <string>
+// #include <vector>
+
+// using namespace std;
+
+// string str, ch = {'P', 'P', 'A', 'P'};
+
+// bool isPPAP(vector <char> s) {
+//   if(s.size() >= 4) {
+//     for(int i = 0; i < 4; i++) {
+//       if(s[s.size() - 4 + i] != ch[i]) return false;
+//     }
+//     return true;
+//   } else return false;
+// }
+
+// int main() {
+//   cin >> str;
+
+//   vector <char> s;
+//   for(int i = 0; i < str.size(); i++) {
+//     s.push_back(str[i]);
+//     if(isPPAP(s)) {
+//       for(int t = 0; t < 3; t++) s.pop_back();
+//     }
+//   }
+
+//   if((s.size() == 1 && s[0] == 'P') || isPPAP(s)) cout << "PPAP";
+//   else cout << "NP";
+// }
+
+
+/*----------------------------------아래는 잘못된 코드-----------------------------------------*/
 
 // #include <iostream>
 // #include <string>
