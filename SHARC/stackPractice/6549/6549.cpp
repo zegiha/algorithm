@@ -4,22 +4,23 @@
 
 using namespace std;
 
-int n;
-stack <int> s;
+int n, h[100002];
 
 void solve() {
-  int h[100002] = {0,}, ans = 0;
+  int ansArea = 0;
+  stack <int> s;
   for(int i = 1; i <= n; i++) cin >> h[i];
   s.push(0);
   for(int i = 1; i <= n + 1; i++) {
     while(!s.empty() && h[s.top()] > h[i]) {
-      int top = s.top(); s.pop();
-      int area = h[top] * (i - s.top() - 1);
-      if(area > ans) ans = area;
+      int check = s.top(); s.pop();
+      int newArea = h[check] * (i - s.top() -1);
+      if(newArea > ansArea) ansArea = newArea;
     }
     s.push(i);
   }
-  cout << ans << '\n';
+
+  cout << ansArea;
 }
 
 int main() {
@@ -28,6 +29,37 @@ int main() {
     solve();
   }
 }
+
+// #include <iostream>
+// #include <stack>
+// #include <vector>
+
+// using namespace std;
+
+// int n;
+// stack <int> s;
+
+// void solve() {
+//   int h[100002] = {0,}, ans = 0;
+//   for(int i = 1; i <= n; i++) cin >> h[i];
+//   s.push(0);
+//   for(int i = 1; i <= n + 1; i++) {
+//     while(!s.empty() && h[s.top()] > h[i]) {
+//       int top = s.top(); s.pop();
+//       int area = h[top] * (i - s.top() - 1);
+//       if(area > ans) ans = area;
+//     }
+//     s.push(i);
+//   }
+//   cout << ans << '\n';
+// }
+
+// int main() {
+//   while(true) {
+//     cin >> n; if(!n) break;
+//     solve();
+//   }
+// }
 
 // 처음에 입력값 수 N이 주어짐 시바;;;
 
