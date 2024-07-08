@@ -1,34 +1,132 @@
 #include <iostream>
 #include <stack>
 #include <vector>
-
 using namespace std;
 
-int n, h[100002];
+int n;
 
 void solve() {
-  int ansArea = 0;
+  long long ans = 0;
   stack <int> s;
-  for(int i = 1; i <= n; i++) cin >> h[i];
-  s.push(0);
-  for(int i = 1; i <= n + 1; i++) {
+  vector <long long> h(n + 1);
+  for(int i = 0; i < n; i++) cin >> h[i];
+  for(int i = 0; i < n; i++) {
     while(!s.empty() && h[s.top()] > h[i]) {
-      int check = s.top(); s.pop();
-      int newArea = h[check] * (i - s.top() -1);
-      if(newArea > ansArea) ansArea = newArea;
+      int prevTop = s.top(); s.pop();
+      long long area; // long long 중요함, 넓이 최대 값이 넘어감
+      if(s.empty()) {
+        area = h[prevTop] * i; // 7 6 5 4 3 반례에서 알 수 있듯 현재의 스택이 비어 있으면 i ( n번의 루프를 끝낸 후는 n ) 으로 넓이를 계산해야함
+      }
+      else {
+        area = h[prevTop] * (i - s.top() - 1); // 바로 위 주석으로 인해 pop이후 한번 더 empty를 확인하고 아직 스택이 남아있다면 i - s.top() - 1으로 계산
+      }
+
+      if(area > ans) ans = area;
     }
     s.push(i);
   }
+  while(!s.empty()) {
+    long long prevHTop = h[s.top()], area;
+    s.pop();
+    if(s.empty()) {
+      area = prevHTop * n;
+    }
+    else {
+      area = prevHTop * (n - s.top() - 1);
+    }
 
-  cout << ansArea;
+    if(area > ans) ans = area;
+  }
+
+  cout << ans << '\n';
 }
 
 int main() {
   while(true) {
-    cin >> n; if(!n) break;
+    cin >> n; if(n == 0) break;
     solve();
   }
 }
+
+// --------------------정답 코드---------------------
+// #include <iostream>
+// #include <stack>
+
+// using namespace std;
+
+// int n;
+// long long ans, h[100002];
+
+// void solve() {
+//  stack <int> s;
+//   for(int i = 0; i < n; i++) cin >> h[i];
+//   for(int i = 0; i < n; i++) {
+//     while(!s.empty() && h[s.top()] > h[i]) {
+//       long long hTop = h[s.top()];
+//       int l = i;
+//       s.pop();
+
+//       if(!s.empty()) l = i - s.top() - 1;
+//       if(l * hTop > ans) ans = l * hTop;
+//     }
+//     s.push(i);
+//   }
+//   while(!s.empty()) {
+//     long long hTop = h[s.top()];
+//     int l = n;
+//     s.pop();
+    
+//     if(!s.empty()) {
+//       l = n - s.top() - 1;
+//     }
+
+//     if(l * hTop > ans) ans = l * hTop;
+//   }
+
+//   cout << ans << '\n';
+// }
+
+// int main() {
+//   while(true) {
+//     cin >> n;
+//     if(n == 0) break;
+//     solve();
+//     ans = 0;
+//   }
+// }
+// --------------------------------------------------
+
+// #include <iostream>
+// #include <stack>
+// #include <vector>
+
+// using namespace std;
+
+// int n, h[100002];
+
+// void solve() {
+//   int ansArea = 0;
+//   stack <int> s;
+//   for(int i = 1; i <= n; i++) cin >> h[i];
+//   s.push(0);
+//   for(int i = 1; i <= n + 1; i++) {
+//     while(!s.empty() && h[s.top()] > h[i]) {
+//       int check = s.top(); s.pop();
+//       int newArea = h[check] * (i - s.top() -1);
+//       if(newArea > ansArea) ansArea = newArea;
+//     }
+//     s.push(i);
+//   }
+
+//   cout << ansArea;
+// }
+
+// int main() {
+//   while(true) {
+//     cin >> n; if(!n) break;
+//     solve();
+//   }
+// }
 
 // #include <iostream>
 // #include <stack>

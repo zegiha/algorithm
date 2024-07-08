@@ -5,7 +5,7 @@ using namespace std;
 int have[100000], sample[100000], haveN, sampleN;
 
 bool isHave(int n) {
-  int mid = (haveN - 1) / 2, left = 0, right = haveN - 1;
+  int mid = haveN / 2, left = 0, right = haveN - 1;
   while(left < right) {
     if(n < have[mid]) right = mid - 1;
     else if(n > have[mid]) left = mid + 1;
