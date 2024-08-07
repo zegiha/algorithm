@@ -5,6 +5,11 @@
     "initializer_list": "cpp",
     "utility": "cpp",
     "ostream": "cpp",
-    "algorithm": "cpp"
+    "algorithm": "cpp",
+    "deque": "cpp",
+    "string": "cpp",
+    "iostream": "cpp",
+    "*.tcc": "cpp",
+    "cstring": "cpp"
   }
 }
