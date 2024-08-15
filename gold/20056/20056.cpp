@@ -1,56 +1,84 @@
-// #include <iostream>
-// #include <vector>
+#include <iostream>
+#include <vector>
 
-// using namespace std;
+using namespace std;
 
-// int n, m, k;
+struct FIREBALL {
+  int r;
+  int c;
+  int m;
+  int s;
+  int d;
+};
 
-// vector <pair <int, int>> cdn;
-// vector <vector <vector <int>>> arr;
+int n, m, k, dr[] = {-1, -1, 0, 1, 1, 1, 0, -1}, dc[] = {0, 1, 1, 1, 0, -1, -1, -1};
+vector<FIREBALL> map[55][55];
+vector<FIREBALL> fireball;
 
-// pair <int, int> dir[8] = {
-//   {-1, 0},
-//   {-1, 1},
-//   {0, 1},
-//   {1, 1},
-//   {1, 0},
-//   {1, -1},
-//   {0, -1},
-//   {-1, -1},
-// };
-// pair <int, int> move_and_getNewCdn(int row, int col) {
-//   pair <int, int> res = {row, col};
-//   int s = arr[row][col][1], d = arr[row][col][2];
+int adjustArea(int req) {
+  if (req >= n) return req % n;
+  if (req < 0) return (req + n) % n;
+  return req;
+}
 
-//   for(int t = 0; t < arr[row][col][1]; t++) {
-//     res.first += dir[d].first;
-//     res.second += dir[d].second;
-//   }
+void move_and_mark() {
+  for (auto& fb : fireball) {
+    int s = fb.s % n;
+    fb.r = adjustArea(fb.r + dr[fb.d] * s);
+    fb.c = adjustArea(fb.c + dc[fb.d] * s);
+    map[fb.r][fb.c].push_back(fb);
+  }
+}
 
-//   vector <int> tmp = arr[row][col];
-//   arr[row][col] = vector <int> ();
-//   arr[res.first][res.second] = tmp;
+void changeFireball() {
+  vector<FIREBALL> new_fireballs;
+  
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      if (map[i][j].size() > 1) {
+        int newMass = 0, newSpeed = 0;
+        bool allEven = true, allOdd = true;
 
-//   return res;
-// }
+        for (auto& fb : map[i][j]) {
+          newMass += fb.m;
+          newSpeed += fb.s;
+          if (fb.d % 2 == 0) allOdd = false;
+          else allEven = false;
+        }
 
-// int main() {
-//   cin >> n >> m >> k;
-//   arr.resize(n, vector <vector <int>> (n));
-//   for(int i = 0; i < m; i++) {
-//     int row, col, mass, speed, direction;
-//     cin >> row >> col >> mass >> speed >> direction;
-//     row--; col--;
-//     cdn.push_back({row, col});
-//     arr[row][col].push_back(mass);
-//     arr[row][col].push_back(speed);
-//     arr[row][col].push_back(direction);
-//   }
+        newMass /= 5;
+        newSpeed /= map[i][j].size();
+        
+        if (newMass > 0) {
+          for (int d = (allEven || allOdd) ? 0 : 1; d < 8; d += 2) {
+            new_fireballs.push_back({i, j, newMass, newSpeed, d});
+          }
+        }
+      } else if (map[i][j].size() == 1) {
+        new_fireballs.push_back(map[i][j][0]);
+      }
+      map[i][j].clear();
+    }
+  }
+  
+  fireball = move(new_fireballs);
+}
 
-//   while(k--) {
-//     for(int i = 0; i < m; i++) {
-//       cdn[i] = move_and_getNewCdn(cdn[i].first, cdn[i].second);
-//     }
-    
-//   }
-// }
+int main() {
+  cin >> n >> m >> k;
+  for (int i = 0; i < m; i++) {
+    int r, c, m, s, d;
+    cin >> r >> c >> m >> s >> d;
+    r--; c--;
+    fireball.push_back({r, c, m, s, d});
+  }
+
+  while (k--) {
+    move_and_mark();
+    changeFireball();
+  }
+  
+  int ans = 0;
+  for (auto& fb : fireball) ans += fb.m;
+  cout << ans;
+}
