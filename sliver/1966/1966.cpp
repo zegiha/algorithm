@@ -20,7 +20,7 @@ void solve() {
   arr.resize(n);
   queue <pair <int, int>> q;
   for (int i = 0; i < n; i++) {
-    cin >> arr[i];
+    cin >> arr[i];  
     q.push({arr[i], i});
   }
   while(!q.empty()) {
