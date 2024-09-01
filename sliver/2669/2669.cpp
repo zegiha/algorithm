@@ -13,10 +13,10 @@ int main() {
     for(int i = d; i < u; i++) {
       for(int j = l; j < r; j++) {
         arr[i][j] = true;
-        cout << i << ", " << j << '\n';
+        // cout << i << ", " << j << '\n';
       }
     }
-    cout << "=======================\n";
+    // cout << "=======================\n";
   }
 
   for(int i = 1; i <= 100; i++) {
@@ -25,13 +25,13 @@ int main() {
     }
   }
 
-  cout << ans << "\n============================\n\n";
+  cout << ans;
 
-  for(int i = 8; i >= 0; i--) {
-    for(int j = 8; j >= 0; j--) {
-      if(arr[i][j]) cout << '1';
-      else cout << '0';
-    }
-    cout << endl;
-  }
+  // for(int i = 8; i >= 0; i--) {
+  //   for(int j = 8; j >= 0; j--) {
+  //     if(arr[i][j]) cout << '1';
+  //     else cout << '0';
+  //   }
+  //   cout << endl;
+  // }
 }
