@@ -1,65 +1,56 @@
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
 void solve() {
-  string func, array;
-  int size;
-  vector <int> arr;
-
-  cin >> func >> size >> array;
-
-  int t = 0, v = 0;
-  while(size) {
-    if(array[t] >= '0' && array[t] <= '9') {
+  string cmd, in;
+  int arr[100'001], size;
+  cin >> cmd >> size >>in;
+  
+  int v = 0, idx = 0;
+  for(char c : in) {
+    if(c >= '0' && c <= '9') {
       v *= 10;
-      v += array[t] - '0';
-    } else {
-      if(v != 0) {
-        arr.push_back(v);
-        size--;
-      }
+      v += c - '0';
+    } else if((c == ']' || c == ',') && idx < size) {
+      arr[idx++] = v;
       v = 0;
     }
-    t++;
   }
 
-  bool isFront = true;
-
-  for(int i = 0; i < func.size(); i++) {
-    if(func[i] == 'R') {
-      isFront = !isFront;
-    } else {
-      if(arr.size() == 0) {
-        cout << "error\n";
-        return;
-      }
-      if(isFront) {
-        arr.erase(arr.begin());
+  bool isReverse = false;
+  int front = 0, back = size;
+  for(char c : cmd) {
+    if(c == 'R') {
+      isReverse = !isReverse;
+    } else if(c == 'D') {
+      if(isReverse) {
+        back--;
       } else {
-        arr.pop_back();
+        front++;
       }
     }
   }
 
-  if(isFront) {
-    cout << '[';
-    for(int i = 0; i < arr.size(); i++) {
-      cout << arr[i];
-      if(i + 1 == arr.size()) cout << "]\n";
-      else cout << ',';
-    }
+  if(!(front <= back)) {
+    cout << "error\n";
+  } else if(front == back) {
+    cout << "[]\n";
   } else {
     cout << '[';
-    for(int i = arr.size()-1; i >= 0; i--) {
-      cout << arr[i];
-      if(i == 0) cout << "]\n";
-      else cout << ',';
+    if(isReverse) {
+      for(int i = back - 1; i >= front; i--) {
+        cout << arr[i];
+        if(i != front) cout << ',';
+      }
+    } else {
+      for(int i = front; i < back; i++) {
+        cout << arr[i];
+        if(i + 1!= back) cout << ',';
+      }
     }
+    cout << "]\n";
   }
-
-  return;
 }
 
 int main() {
