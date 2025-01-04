@@ -1,23 +1,40 @@
-// #include <iostream>
-// #include <algorithm>
+#include <stdio.h>
+// BOJ 7579
 
-// using namespace std;
+int N, M;
+int m[100], c[100];
+int dp[100][10001];
 
-// int n, m, arr[100][2], dp[100][10'000], max_cost;
+int main() {
+    scanf("%d %d", &N, &M);
+    for (int i = 0; i < N; i++) {
+        scanf("%d", &m[i]);
+    }
+    for (int i = 0; i < N; i++) {
+        scanf("%d", &c[i]);
+    }
 
-// int main() {
-//     cin >> n >> m;
-//     for(int i = 0; i < n; i++) {
-//         cin >> arr[i][0];
-//     }
-//     for(int i = 0; i < n; i++) {
-//         cin >> arr[i][1];
-//         max_cost += arr[i][1];
-//     }
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j <= 10000; j++) {
+            if (i == 0) {
+                if (j >= c[i]) {
+                    dp[i][j] = m[i];
+                }
+            } else {
+                if (j >= c[i]) {
+                    dp[i][j] = dp[i - 1][j - c[i]] + m[i];
+                }
+                dp[i][j] = dp[i][j] > dp[i - 1][j] ? dp[i][j] : dp[i - 1][j];
+            }
+        }
+    }
 
-//     for(int i = 0; i < n; i++) {
-//         for(int j = 0; j <= max_cost; j++) {
+    for (int i = 0; i <= 10000; i++) {
+        if (dp[N - 1][i] >= M) {
+            printf("%d\n", i);
+            break;
+        }
+    }
 
-//         }
-//     }
-// }
+    return 0;
+}
