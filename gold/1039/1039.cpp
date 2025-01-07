@@ -1,77 +1,52 @@
 #include <iostream>
-#include <algorithm>
+#include <set>
+#include <queue>
 #include <string>
-#include <vector>
 
 using namespace std;
 
-string swap(string n) {
-  pair <int, int> small = {-1, -1}, big = {-1, -1};
-
-  int temp;
-  // for(int i = 0; i < n.size() - 1; i++) {
-  //   small = {n[i] - '0', i};
-  //   if(small.first == 0) continue;
-  //   for(int j = i + 1; j < n.size(); j++) {
-  //     temp = n[j] - '0';
-  //     if(temp > big.first) {
-  //       big = {temp, j};
-  //     }
-  //   }
-  //   if(small.first < big.first) {
-  //     n[small.second] = big.first + '0';
-  //     n[big.second] = small.first + '0';
-  //     return n;
-  //   }
-  // }
-  for(int i = 0; i < n.size() - 1; i++) {
-    small = {n[i] - '0', i};
-    if(small.first == 0) continue;
-    for(int j = i + 1; j < n.size(); j++) {
-      temp = n[j] - '0';
-      if(temp > small.first) {
-        if(temp > big.first) {
-          big = {temp, j};
-          // cout << big.first << ' ' << big.second << endl;
-        } else if(temp == big.first) {
-          big.second = j;
-        }
-      }
-    }
-    if(big.first != -1) {
-      n[big.second] = small.first + '0';
-      n[small.second] = big.first + '0';
-      return n;
-    }
+int to_number(string v) {
+  int ans = 0;
+  for(int i = 0; i < v.size(); i++) {
+    ans *= 10;
+    ans += v[i] - '0';
   }
-
-  for(int i = n.size() - 1; i > 0; i--) {
-    small = {n[i] - '0', i};
-    if(small.first == 0) continue;
-    for(int j = i - 1; j >= 0; j--) {
-      temp = n[j] - '0';
-      if(temp != 0) {
-        n[small.second] = n[j];
-        n[j] = small.first + '0';
-        return n;
-      }
-    }
-  }
-  return "-1";
+  return ans;
 }
 
 int main() {
-  string n;
-  int k;
-  cin >> n >> k;
+  string n; int k; cin >> n >> k;
 
-  while(k--) {
-    n = swap(n);
-    if(n == "-1") {
-      cout << -1;
-      return 0;
+  int ans = -1;
+  queue <string> q;
+
+  q.push(n);
+  while(!q.empty() && k > 0) {
+    int size = q.size();
+    set <string> s;
+    k--;
+    while(size--) {
+      string v = q.front();
+      q.pop();
+      for(int i = 0; i < v.size() - 1; i++) {
+        char t = v[i];
+        for(int j = i + 1; j < v.size(); j++) {
+          string new_v = v;
+          if(new_v[j] == '0' && i == 0) continue;
+          new_v[i] = new_v[j];
+          new_v[j] = t;
+          if(s.end() == s.find(new_v)) {
+            s.insert(new_v);
+            q.push(new_v);
+          }
+          if(k == 0 && ans < to_number(new_v)) {
+            ans = to_number(new_v);
+          }
+        }
+      }
     }
   }
 
-  cout << n;
+  if(k > 0) cout << "-1";
+  else cout << ans;
 }
