@@ -60,7 +60,8 @@ void solve() {
   for(int i = 0; i < e.size(); i++) {
     int node = e[i];
     if(
-      S[node] == S[g] + G[h] + H[node] || S[node] == S[h] + H[g] + G[node]
+      S[node] == S[g] + G[h] + H[node] ||
+      S[node] == S[h] + H[g] + G[node]
     ) {
       ans.push_back(node);
     }
