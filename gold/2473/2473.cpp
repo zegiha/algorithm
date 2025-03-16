@@ -1,3 +1,39 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+#define INF 4'200'000'000
+
+using namespace std;
+using ll = long long;
+
+ll arr[5001], n;
+pair <ll, vector <int>> ans = {INF, vector <int> (0)};
+
+int main() {
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+  cin >> n;
+  for(int i = 0; i < n; i++) cin >> arr[i];
+  sort(arr, arr + n);
+
+  for(int i = 0; i < n-2; i++) {
+    int l = i+1, r = n-1;
+    while(l < r) {
+      ll v = arr[i] + arr[l] + arr[r];
+      if(abs(v) < ans.first) {
+        vector <int> t; t.push_back(i); t.push_back(l); t.push_back(r);
+        ans = {abs(v), t};
+      }
+      if(v < 0) l++;
+      else if(v > 0) r--;
+      else break;
+    }
+  }
+
+  for(int i = 0; i < 3; i++) cout << arr[ans.second[i]] << ' ';
+}
+
 // #include <iostream>
 // #include <algorithm>
 // #include <vector>
