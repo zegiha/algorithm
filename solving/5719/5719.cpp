@@ -7,18 +7,21 @@ using pii = pair <int, int>;
 
 int n, m, s, d;
 vector <vector <pii>> arr;
+vector <int> w[501];
+bool visited[501] = {0, };
+priority_queue <pii, vector <pii>, greater <pii>> pq;
+int dist[501];
+queue <int> q;
 
-vector <vector <int>> getDist() {
-  priority_queue <pii, vector <pii>, greater <pii>> q;
-  vector <int> dist(n, -1);
-  vector <vector <int>> res(n);
+void setW() {
+  for(int i = 0; i < n; i++) dist[i] = -1;
 
-  q.push({0, s});
+  pq.push({0, s});
   dist[s] = 0;
 
-  while(!q.empty()) {
-    int node = q.top().second, value = q.top().first;
-    q.pop();
+  while(!pq.empty()) {
+    int node = pq.top().second, value = pq.top().first;
+    pq.pop();
 
     if(dist[node] != -1 && dist[node] < value) continue;
 
@@ -26,73 +29,57 @@ vector <vector <int>> getDist() {
       int newNode = arr[node][i].second, newValue = arr[node][i].first + value;
       if(dist[newNode] == -1 || newValue < dist[newNode]) {
         dist[newNode] = newValue;
-        q.push({newValue, newNode});
+        pq.push({newValue, newNode});
 
-        res[newNode].clear();
-        res[newNode].push_back(node);
-      } else if(dist[newNode] == newValue) res[newNode].push_back(node);
+        w[newNode].clear();
+        w[newNode].push_back(node);
+      } else if(dist[newNode] == newValue) w[newNode].push_back(node);
     }
   }
 
-  return res;
 }
 
-void deleteDist(vector <vector<int>> dist, int now) {
-  if(now == s) return;
+void deleteDist() {
+  setW();
+  q.push(d);
 
-  for(int i = 0; i < dist[now].size(); i++) {
-    int next = dist[now][i];
-    for(int i = 0; i < arr[next].size(); i++) {
-      if(arr[next][i].second == now) arr[next][i] = {-1, -1};
-    }
-    deleteDist(dist, next);
-  }
-  
-  // queue <int> q;
-  // vector <bool> visited(n, false);
-
-  // q.push(d);
-  // visited[d] = true;
-
-  // for(int i = 0; i < dist.size(); i++) {
+  // for(int i = 0; i < n; i++) {
   //   cout << i << " : ";
-  //   for(int j = 0; j < dist[i].size(); j++) {
-  //     cout << dist[i][j] << ' ';
+  //   for(int j = 0; j < w[i].size(); j++) {
+  //     cout << w[i][j] << ' ';
   //   }
   //   cout << '\n';
   // }
 
-  // while(!q.empty()) {
-  //   int node = q.front();
-  //   q.pop();
+  while(!q.empty()) {
+    int node = q.front();
+    q.pop();
 
-  //   for(int i = 0; i < dist[node].size(); i++) {
-  //     int newNode = dist[node][i];
+    for(int i = 0; i < w[node].size(); i++) {
+      int newNode = w[node][i];
 
-  //     if(visited[newNode]) continue;
-
-  //     for(int j = 0; j < arr[newNode].size(); j++) {
-  //       if(arr[newNode][j].second == node) {
-  //         arr[newNode][j] = {-1, -1};
-  //       }
-  //     }
-
-  //     q.push(newNode);
-  //     visited[newNode] = true;
-  //   }
-  // }
+      for(int j = 0; j < arr[newNode].size(); j++) {
+        if(arr[newNode][j].second == node) {
+          arr[newNode][j] = {-1, -1};
+        }
+      }
+      if(!visited[newNode]) {
+        q.push(newNode);
+        visited[newNode] = true;
+      }
+    }
+  }
 }
 
 int getAns() {
-  priority_queue <pii, vector <pii>, greater <pii>> q;
-  vector <int> dist(n, -1);
+  for(int i = 0; i < n; i++) dist[i] = -1;
 
-  q.push({0, s});
+  pq.push({0, s});
   dist[s] = 0;
 
-  while(!q.empty()) {
-    int node = q.top().second, value = q.top().first;
-    q.pop();
+  while(!pq.empty()) {
+    int node = pq.top().second, value = pq.top().first;
+    pq.pop();
 
     if(dist[node] != -1 && dist[node] < value) continue;
 
@@ -102,7 +89,7 @@ int getAns() {
       int newNode = arr[node][i].second, newValue = arr[node][i].first + value;
       if(dist[newNode] == -1 || newValue < dist[newNode]) {
         dist[newNode] = newValue;
-        q.push({newValue, newNode});
+        pq.push({newValue, newNode});
       }
     }
   }
@@ -116,16 +103,21 @@ int main() {
     if(n == 0 && m == 0) break;
     cin >> s >> d;
 
-    arr.resize(n, vector <pii> (0));
+    arr.resize(n);
     for(int i = 0; i < m; i++) {
       int u, v, p;
       cin >> u >> v >> p;
       arr[u].push_back({p, v});
     }
 
-    deleteDist(getDist(), d);
+    deleteDist();
+    // cout << "============";
     cout << getAns() << '\n';
 
     arr.clear();
+    for(int i = 0; i < 501; i++) {
+      w[i].clear();
+      visited[i] = false;
+    }
   }
 }
