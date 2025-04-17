@@ -4,15 +4,15 @@
 using namespace std;
 
 int n, p[100'001][18], d[100'001], maxHeight;
-vector <vector <int>> a;
+vector <vector <int>> arr;
 
 void makeTree(int node, int parent, int depth) {
   p[node][0] = parent;
   d[node] = depth;
 
-  for(int i = 0; i < a[node].size(); i++) {
-    if(a[node][i] != parent) {
-      makeTree(a[node][i], node, depth + 1);
+  for(int i = 0; i < arr[node].size(); i++) {
+    if(arr[node][i] != parent) {
+      makeTree(arr[node][i], node, depth + 1);
     }
   }
 }
@@ -26,7 +26,7 @@ int LCA(int node1, int node2) {
     }
 
     int dif = d[node1] - d[node2];
-    for(int i = 0; i < dif; i++) {
+    for(int i = 0; 0 < dif; i++) {
       if(dif % 2 == 1) node1 = p[node1][i];
       dif = dif >> 1;
     }
@@ -38,22 +38,26 @@ int LCA(int node1, int node2) {
         node1 = p[node1][i];
         node2 = p[node2][i];
       }
-      node1 = p[node1][0];
     }
+    node1 = p[node1][0];
   }
   return node1;
 }
 
 int main() {
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+  cout.tie(0);
+
   cin >> n;
-  a.resize(n);
+  arr.resize(n+1, vector <int> (0));
   for(int i = 1; i < n; i++) {
-    int ti, tii; cin >> ti, tii;
-    a[ti].push_back(tii);
-    a[tii].push_back(ti);
+    int a, b; cin >> a >> b;
+    arr[a].push_back(b);
+    arr[b].push_back(a);
   }
 
-  makeTree(1, -1, 0);
+  makeTree(1, 0, 0);
 
   int tmp = n, cnt = 0;
   while(tmp > 1) {
@@ -62,7 +66,7 @@ int main() {
   }
   maxHeight = cnt;
 
-  for(int k = 1; k < maxHeight; k++) {
+  for(int k = 1; k <= maxHeight; k++) {
     for(int i = 2; i <= n; i++) {
       if(p[i][k-1] == 0) continue;
       p[i][k] = p[p[i][k-1]][k-1];
