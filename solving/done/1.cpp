@@ -1,37 +1,54 @@
 #include <iostream>
-#include <string>
+#include <vector>
+#include <cmath>
+
+#define MAX 1000000
 
 using namespace std;
+using ll = long long;
 
-int arr[80][80], n = 80;
+vector <ll> st;
 
-string del_comma(string a) {
-    string res = "";
-    for(int i = 0; i < a.size(); i++) {
-        if(a[i] != ',') {
-            res += a[i];
-        }
+void init() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    int height = (int)ceil(log2(MAX));
+    st.resize(1 << (height + 1));
+}
+
+int qSt(int n, int s, int e, int v) {
+    if(s == e) return s;
+
+    int m = (s + e) / 2;
+    if(st[n * 2] >= v) return qSt(n * 2, s, m, v);
+    else return qSt(n * 2 + 1, m + 1, e, v - st[n * 2]);
+}
+
+void uSt(int n, int s, int e, int idx, int v) {
+    if(idx < s || idx > e) return;
+    st[n] += (ll)v;
+
+    if(s != e) {
+        int m = (s + e) / 2;
+        uSt(n * 2, s, m, idx, v);
+        uSt(n * 2 + 1, m + 1, e, idx, v);
     }
-    return res;
 }
 
 int main() {
-    for(int i = 0; i < n; i++) {
-        string a; cin >> a;
-        a = del_comma(a);
-        int idx = 0;
-        for(int j = 0; j < n; j++) {
-            int res = 0;
-            while(a[idx] != ' ' && idx < a.size()) {
-                res *= 10;
-                res += a[idx++]-'0';
-            }
-            arr[i][j] = res;
-        }
-    }
+    init();
 
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < n; j++) cout << arr[i][j] << ' ';
-        cout << '\n';
+    int t; cin >> t;
+    while(t--) {
+        int a, b, c;
+        cin >> a >> b;
+        if(a == 1) {
+            int res = qSt(1, 1, MAX, b);
+            cout << res << '\n';
+            b = res;
+            c = -1;
+        } else cin >> c;
+        uSt(1, 1, MAX, b, c);
     }
 }
