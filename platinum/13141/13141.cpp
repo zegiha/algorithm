@@ -8,18 +8,20 @@ using namespace std;
 int arr[201][201], n, m, max_edges[201][201];
 
 double burnGraph() {
-  double min_time = INF, max_time, spent_time, remain_len, max_edge;
+  double min_time = INF, max_time, spent_time, remain_len;
+  int max_edge;
 
   for(int s = 1; s <= n; s++) {
+    max_time = 0.0;
     for(int f = 1; f <= n; f++) {
       for(int t = 1; t <= n; t++) {
         max_edge = max_edges[f][t];
         if(max_edge == -1) continue;
 
-        remain_len = max_edge - (arr[s][t] - arr[s][f]);
+        remain_len = (double)max_edge - (arr[s][t] - arr[s][f]);
         if(remain_len < 0) continue;
 
-        spent_time = remain_len / 2 + arr[s][t];
+        spent_time = (remain_len / 2) + arr[s][t];
         max_time = max(max_time, spent_time);
       }
     }
@@ -31,14 +33,20 @@ double burnGraph() {
 }
 
 int main() {
-  for(int i = 0; i < 201; i++) for(int j = 0; j < 201; j++) max_edges[i][j] = -1;
+  for(int i = 0; i < 201; i++) for(int j = 0; j < 201; j++) {
+    arr[i][j] = 1'000'000'000;
+    max_edges[i][j] = -1;
+  }
+  for(int i = 0; i < 201; i++) arr[i][i] = 0;
 
   cin >> n >> m;
   int a, b, c;
   for(int i = 0; i < m; i++) {
     cin >> a >> b >> c;
-    arr[a][b] = c;
-    arr[b][a] = c;
+
+    arr[a][b] = min(arr[a][b], c);
+    arr[b][a] = min(arr[b][a], c);
+
     max_edges[a][b] = max(max_edges[a][b], c);
     max_edges[b][a] = max(max_edges[b][a], c);
   }
