@@ -1,90 +1,70 @@
 #include <iostream>
-#include <vector>
 #include <queue>
+#include <vector>
 
 using namespace std;
 
-int
-n,
-p[100'001][18],
-dist[100'001][18],
-h[100'001],
-mh,
-e[100'001];
+int n, cost[100'001];
+pair <int, int> table[100'001][18];
 vector <vector <pair <int, int>>> arr;
 
-void init_p() {
-  int currnet_height = 1;
+void init_table() {
   queue <int> q;
-  vector <bool> visit (n + 1);
+  vector <bool> v (n+1, false);
 
   q.push(1);
-  visit[1] = true;
-  h[1] = currnet_height;
+  v[1] = true;
 
   while(!q.empty()) {
-    currnet_height++;
-    int size = q.size();
-    while(size--) {
-      int node = q.front();
-      q.pop();
-      for(int i = 0; i < arr[node].size(); i++) {
-        if(!visit[arr[node][i].first]) {
-          visit[arr[node][i].first] = true;
-          q.push(arr[node][i].first);
-          p[arr[node][i].first][0] = node;
-          dist[arr[node][i].first][0] = arr[node][i].second;
-          h[arr[node][i].first] = currnet_height;
-        }
+    int node = q.front();
+    q.pop();
+
+    for(int i = 0; i < arr[node].size(); i++) {
+      int new_node = arr[node][i].first, cost = arr[node][i].second;
+      if(!v[new_node]) {
+        q.push(new_node);
+        v[new_node] = true;
+        table[new_node][0] = {node, cost};
       }
     }
   }
 
-  int tmp = n;
-  while(tmp) {
-    tmp = tmp >> 1;
-    mh++;
+  for(int i = 1; i <= n; i++) {
+    cout << table[i][0].first << ' ' << table[i][0].second << '\n';
   }
 
-  for(int j = 1; j <= mh; j++) {
+  for(int j = 1; j < 18; j++) {
     for(int i = 1; i <= n; i++) {
-      p[i][j] = p[p[i][j - 1]][j - 1];
-      dist[i][j] = dist[i][j - 1] + dist[p[i][j - 1]][j -1];
+      if(table[i][j-1].first == 0) continue;
+      int
+      new_node = table[table[i][j-1].first][j-1].first,
+      new_cost = table[i][j-1].second + table[table[i][j-1].first][j-1].second;
+      table[i][j] = {new_node, new_cost};
     }
   }
-}
-
-int get_ans(int node, int energy) {
-  int res = node;
-  for(int i = 0; i <= mh; i++) {
-    if(dist[node][i] >= 0 && dist[node][i] <= energy) {
-      res = p[node][i];
-      // cout << i << ' ' << dist[node][i] << '\n';
-    }
+  for(int i = 1; i <= n; i++) {
+    cout << table[i][0].first << ' ' << table[i][0].second << '\n';
   }
-  // cout << "============\n";
-  if(res == 0) res = 1;
-  return res;
 }
 
 int main() {
-  // for(int i = 0; i < 100'001; i++) for(int j = 0; j < 18; j++) dist[i][j] = -1;
-
   cin >> n;
+  for(int i = 0; i < n; i++) cin >> cost[i];
 
-  for(int i = 0; i < n; i++) cin >> e[i];
-
-  int a, b, c;
   arr.resize(n + 1, vector <pair <int, int>> (0));
-  for(int i = 0; i < n-1; i++) {
+  int a, b, c;
+  for(int i = 0; i < n - 1; i++) {
     cin >> a >> b >> c;
     arr[a].push_back({b, c});
     arr[b].push_back({a, c});
   }
 
-  init_p();
-  for(int i = 0; i < n; i++) {
-    cout << get_ans(i + 1, e[i]) << '\n';
-    // cout << "===========\n";
+  init_table();
+
+  for(int i = 1; i <= n; i++) {
+    for(int j = 0; j < 17; j++) {
+      cout << table[i][j].first << ' ' << table[i][j].second << "  ||  ";
+    }
+    cout << '\n';
   }
 }
