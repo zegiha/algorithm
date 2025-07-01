@@ -25,8 +25,8 @@ int main() {
     dp[i][arr[i]] = 1;
     
     if(i == 0) continue;
-    for(int j = 1; j <= arr[i]; j++) dp[i][j] += dp[i-1][j];
     for(int j = 1; j <= arr[i]; j++) {
+      dp[i][j] = dp[i-1][j];
       ll gcd = getGcd(arr[i], j);
       dp[i][gcd] = (dp[i][gcd] + dp[i-1][j]) % MOD;
     }
