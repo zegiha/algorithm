@@ -35,6 +35,7 @@ class Matrix {
 
 Matrix power(Matrix a, int p) {
   Matrix b;
+
   if(p == 0) {
     for(int i = 0; i < n; i++) b.v[i][i] = 1;
     return b;
@@ -43,11 +44,9 @@ Matrix power(Matrix a, int p) {
   if(p == 1) return a;
 
   b = power(a, p / 2);
-  b = b * b;
 
-  if(p % 2 == 0) b = b * a;
-
-  return b;
+  if(p % 2 == 0) return b * b;
+  else return b * b * a;
 }
 
 int main() {
@@ -64,22 +63,22 @@ int main() {
       arr[i].v[start][end] = cnt;
     }
   }
-  // Matrix tmp;
-  // for(int i = 0; i < n; i++) tmp.v[i][i] = 1;
-
-  // tmp = tmp * arr[1];
-  // for(int i = 0; i < n; i++) {
-  //   for(int j = 0; j < n; j++) cout << tmp.v[i][j] << ' ';
-  //   cout << '\n';
-  // }
-
 
   for(int i = 0; i < n; i++) arr[0].v[i][i] = 1;
   
 
-  for(int i = 1; i < t; i++) {
+  for(int i = 1; i <= t; i++) {
     arr[0] = arr[0] * arr[i];
   }
+
+  // for(int i = 0; i < n; i++) {
+  //   for(int j = 0; j < n; j++) {
+  //     cout << arr[0].v[i][j] << ' ';
+  //   }
+  //   cout << '\n';
+  // }
+
+  // cout << "\n===================\n\n";
 
   arr[0] = power(arr[0], d / t);
   for(int i = 1; i <= d % t; i++) {
