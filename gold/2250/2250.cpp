@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int n, tree[10'001][2], childCnt[10'001][2], position[10'001];
+int n, tree[10'010][2], childCnt[10'010][2], position[10'010], parent[10'010];
 vector <vector <int>> level;
 pair <int, int> ans;
 
@@ -30,17 +30,19 @@ int main() {
   cout.tie(0);
 
   cin >> n;
-  level.resize(n + 1, {});
+  level.resize(n + 2, {});
 
-  int a, b, c;
+  int a, b, c, root = n * (n+1)/2;
   for(int i = 0; i < n; i++) {
     cin >> a >> b >> c;
     tree[a][0] = b;
     tree[a][1] = c;
+    if(b != -1) root -= b;
+    if(c != -1) root -= c;
   }
 
-  setChildCntAndLevel(1, 1);
-  setPosition(1, 0);
+  setChildCntAndLevel(root, 1);
+  setPosition(root, 0);
 
   int targetLevel = 1, width;
   ans = {-1, -2'100'000'000};
