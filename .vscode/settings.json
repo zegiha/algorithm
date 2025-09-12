@@ -45,6 +45,7 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "climits": "cpp",
-        "__bit_reference": "cpp"
+        "__bit_reference": "cpp",
+        "queue": "cpp"
     }
 }
