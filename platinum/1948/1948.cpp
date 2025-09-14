@@ -5,7 +5,7 @@
 using namespace std;
 using pii = pair <int, int>;
 
-int n, m, maxDist[10'001], startNode, endNode, usedRoad;
+int n, m, maxDist[10'001], startNode, endNode, usedRoad, entry[10'001];
 vector <vector <pii>> graph, reverseGraph;
 
 void setMaxDist() {
@@ -19,10 +19,11 @@ void setMaxDist() {
 
     for(int i = 0; i < graph[node].size(); i++) {
       int newNode = graph[node][i].first, newDist = dist + graph[node][i].second;
-      bool isVisit = maxDist[newNode] != 0;
 
       maxDist[newNode] = max(maxDist[newNode], newDist);
-      if(!isVisit) q.push({newNode, newDist});
+      entry[newNode]--;
+
+      if(entry[newNode] == 0) q.push({newNode, maxDist[newNode]});
     }
   }
 }
@@ -67,14 +68,12 @@ int main() {
 
     graph[a].push_back({b, c});
     reverseGraph[b].push_back({a, c});
+    entry[b]++;
   }
 
   cin >> startNode >> endNode;
 
   setMaxDist();
-
-  // for(int i = 1; i <= n; i++) cout << maxDist[i] << ' ';
-  // cout << '\n';
 
   setUsedRoad();
 
