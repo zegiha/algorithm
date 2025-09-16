@@ -46,6 +46,7 @@
         "typeinfo": "cpp",
         "climits": "cpp",
         "__bit_reference": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "ios": "cpp"
     }
 }
