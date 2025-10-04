@@ -3,41 +3,60 @@
 using namespace std;
 using pii = pair <int, int>;
 
-int n, in[100'001], post[100'001], bt[100'002][2];
+int n, post[100'001], in[100'001], bt[100'002][2];
 
-void printPre(int node) {
-  cout << node << ' ';
-  if(bt[node][0])printPre(bt[node][0]);
-  if(bt[node][1])printPre(bt[node][1]);
-}
+void abbyRoad(int postIdx, int inIdx, pii inRange) {
+  // cout << postIdx << ' ' << inIdx << ' ' << inRange.first << ' ' << inRange.second << '\n';
 
-void setBt(int postIdx, int inIdx, int leftStart, int rightEnd) {
-  cout << postIdx << ' ' << inIdx << ' ' << leftStart << ' ' << rightEnd << '\n';
-
-  int childInIdx = -1;
-  bool isLeftChild = false;
-
-  for(int i = leftStart; i < inIdx; i++)
-  if(post[postIdx - 1] == in[i]) {
-    isLeftChild = true;
-    childInIdx = i;
-    break;
+  int newInIdx;
+  bool isLeft = false;
+  for(int i = inRange.first; i < inIdx; i++) {
+    if(in[i] == post[postIdx - 1]) {
+      isLeft = true;
+      newInIdx = i;
+      break;
+    }
   }
 
-  if(isLeftChild) {
+  if(isLeft) {
     bt[post[postIdx]][0] = post[postIdx - 1];
-    if(leftStart >= childInIdx -1) return;
-    setBt(postIdx - 1, childInIdx, leftStart, childInIdx - 1);
+    if(inRange.first >= inIdx - 1) return;
+    abbyRoad(postIdx - 1, newInIdx, {inRange.first, inIdx - 2});
   } else {
-    for(int i = inIdx + 1; i <= rightEnd; i++) if(post[postIdx-1] == in[i]) {
-      childInIdx = i;
+    if(inIdx + 1 <= inRange.second) {
+      int childrenCnt = inRange.second - (inIdx + 1);
+      for(int i = inRange.first; i < inIdx; i++) {
+        if(in[i] == post[postIdx - 2 - childrenCnt]) {
+          newInIdx = i;
+          break;
+        }
+      }
+
+      bt[post[postIdx]][0] = post[postIdx - 2 - childrenCnt];
+      if(inRange.first < inIdx - 1) {
+        abbyRoad(postIdx - 1 - childrenCnt, newInIdx, {inRange.first, inIdx - 2});
+      }
+    }
+
+    
+
+    for(int i = inIdx + 1; i <= inRange.second; i++) if(in[i] == post[postIdx - 1]) {
+      newInIdx = i;
       break;
     }
 
     bt[post[postIdx]][1] = post[postIdx - 1];
-    if(childInIdx + 1 >= rightEnd) return;
-    setBt(postIdx -1, childInIdx, childInIdx + 1, rightEnd);
+    if(inIdx + 1 >= inRange.second) return;
+    abbyRoad(postIdx - 1, newInIdx, {inIdx + 2, inRange.second});
+
   }
+}
+
+void printingPre(int node) {
+  cout << node << ' ';
+
+  if(bt[node][0]) printingPre(bt[node][0]);
+  if(bt[node][1]) printingPre(bt[node][1]);
 }
 
 int main() {
@@ -45,12 +64,12 @@ int main() {
   for(int i = 0; i < n; i++) cin >> in[i];
   for(int i = 0; i < n; i++) cin >> post[i];
 
-  int inIdx = -1;
+  int rootInIdx;
   for(int i = 0; i < n; i++) if(in[i] == post[n-1]) {
-    inIdx = i;
+    rootInIdx = i;
     break;
   }
 
-  setBt(n-1, inIdx, 0, n-1);
-  printPre(post[n-1]);
+  abbyRoad(n-1, rootInIdx, {0, n-1});
+  printingPre(post[n-1]);
 }
