@@ -5,7 +5,7 @@ using namespace std;
 
 using pii = pair <int, int>;
 
-int n, m, k, parent[30'002][2], childCnt[30'002], dp[30'002][3'001];
+int n, m, k, parent[30'002][2], childCnt[30'002], dpPrev[3'001], dpNext[3'001];
 vector <pii> arr;
 
 int Find(int node) {
@@ -15,11 +15,18 @@ int Find(int node) {
 
 void Union(int a, int b) {
   int aRoot = Find(a), bRoot = Find(b);
+
+  if(aRoot == bRoot) return;
+
   parent[bRoot][0] = aRoot;
   parent[aRoot][1] += parent[bRoot][1];
 }
 
 int main() {
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+  cout.tie(0);
+
   cin >> n >> m >> k;
   for(int i = 1; i <= n; i++) cin >> parent[i][1];
 
@@ -44,11 +51,18 @@ int main() {
   }
 
   for(int i = 1; i <= arr.size(); i++) {
-    for(int j = 1; j <= min(k, 3'000); j++) {
-      if(arr[i-1].second > j) dp[i][j] = dp[i-1][j];
-      else dp[i][j] = max(dp[i-1][j], arr[i-1].first + dp[i-1][j - arr[i-1].second]);
+    for(int j = k-1; j > 0; j--) {
+      if(j >= arr[i-1].second) {
+        dpNext[j] = max(dpPrev[j], dpPrev[j - arr[i-1].second] + arr[i-1].first);
+      } else {
+        dpNext[j] = dpPrev[j];
+      }
+    }
+    for(int j = k-1; j > 0; j--) {
+      dpPrev[j] = dpNext[j];
+      dpNext[j] = 0;
     }
   }
 
-  cout << dp[arr.size()][min(k, 3'000)];
+  cout << dpPrev[k-1];
 }
